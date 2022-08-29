@@ -1,5 +1,10 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using Entities.Concrete;
 using System;
 using System.Collections.Generic;
@@ -18,14 +23,15 @@ namespace Business.Concrete
             _categoryDal = categoryDal;
         }
 
-        public List<Category> GetAll()
+        public IDataResult<List<Category>> GetAll()
         {
-            return _categoryDal.GetAll();
+            return new SuccessDataResult<List<Category>>(_categoryDal.GetAll());
+        }
+        public IDataResult<Category> GetById(int categoryId)
+        {
+            return new SuccessDataResult<Category>(_categoryDal.Get(c=>c.CategoryId==categoryId));
         }
 
-        public Category GetById(int categoryId)
-        {
-            return _categoryDal.Get(c=>c.CategoryId==categoryId);
-        }
+
     }
 }
